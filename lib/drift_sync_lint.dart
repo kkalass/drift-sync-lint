@@ -1,4 +1,4 @@
-import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
 PluginBase createPlugin() => _DriftSyncLintPlugin();
@@ -6,10 +6,40 @@ PluginBase createPlugin() => _DriftSyncLintPlugin();
 class _DriftSyncLintPlugin extends PluginBase {
   @override
   List<LintRule> getLintRules(CustomLintConfigs configs) => [
-    DirectDriftWriteRule(),
+    MyCustomLintCode(),
+    //DirectDriftWriteRule(),
   ];
 }
 
+class MyCustomLintCode extends DartLintRule {
+  MyCustomLintCode() : super(code: _code);
+
+  /// Metadata about the warning that will show-up in the IDE.
+  /// This is used for `// ignore: code` and enabling/disabling the lint
+  static const _code = LintCode(
+    name: 'my_custom_lint_code',
+    problemMessage: 'This is the description of our custom lint',
+  );
+
+  @override
+  void run(
+    CustomLintResolver resolver,
+    ErrorReporter reporter,
+    CustomLintContext context,
+  ) {
+    // Our lint will highlight all variable declarations with our custom warning.
+    context.registry.addVariableDeclaration((node) {
+      // "node" exposes metadata about the variable declaration. We could
+      // check "node" to show the lint only in some conditions.
+
+      // This line tells custom_lint to render a warning at the location of "node".
+      // And the warning shown will use our `code` variable defined above as description.
+      reporter.atNode(node, code);
+    });
+  }
+}
+
+/*
 class DirectDriftWriteRule extends DartLintRule {
   DirectDriftWriteRule() : super(code: _code) {
     print('DirectDriftWriteRule initialized');
@@ -93,3 +123,4 @@ class DirectDriftWriteRule extends DartLintRule {
     return helperMethods.contains(methodName);
   }
 }
+  */
