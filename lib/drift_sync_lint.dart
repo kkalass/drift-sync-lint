@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/error/listener.dart';
 import 'package:custom_lint_builder/custom_lint_builder.dart';
 
@@ -6,8 +7,8 @@ PluginBase createPlugin() => _DriftSyncLintPlugin();
 class _DriftSyncLintPlugin extends PluginBase {
   @override
   List<LintRule> getLintRules(CustomLintConfigs configs) => [
-    MyCustomLintCode(),
-    //DirectDriftWriteRule(),
+    //MyCustomLintCode(),
+    DirectDriftWriteRule(),
   ];
 }
 
@@ -39,7 +40,6 @@ class MyCustomLintCode extends DartLintRule {
   }
 }
 
-/*
 class DirectDriftWriteRule extends DartLintRule {
   DirectDriftWriteRule() : super(code: _code) {
     print('DirectDriftWriteRule initialized');
@@ -123,4 +123,3 @@ class DirectDriftWriteRule extends DartLintRule {
     return helperMethods.contains(methodName);
   }
 }
-  */
