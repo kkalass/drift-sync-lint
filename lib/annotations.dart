@@ -1,0 +1,3 @@
+class AllowDirectDriftWrite {
+  const AllowDirectDriftWrite();
+}
